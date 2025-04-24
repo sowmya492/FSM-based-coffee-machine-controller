@@ -1,0 +1,82 @@
+// Code your testbench here
+// or browse Examples
+module coffee_machine_tb;
+  reg clk;
+  reg rst;
+  reg bean_check;
+  reg start_btn;
+  reg [2:0] mode_select;
+  wire cup_placed;
+  wire milk_dispense;
+  wire coffee_dispense;
+  wire sugar_dispense;
+  wire water_dispense;
+  wire stirrer_action;
+  wire done;
+
+  coffee_machine cm(
+    .clk(clk),
+    .rst(rst),
+    .bean_check(bean_check),
+    .start_btn(start_btn),
+    .mode_select(mode_select),
+    .cup_placed(cup_placed),
+    .milk_dispense(milk_dispense),
+    .coffee_dispense(coffee_dispense),
+    .sugar_dispense(sugar_dispense),
+    .water_dispense(water_dispense),
+    .stirrer_action(stirrer_action),
+    .done(done)
+  );
+
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+    clk = 0;
+    rst = 1;
+    bean_check = 0;
+    start_btn = 0;
+    mode_select = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b000; // Milk with sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b001; // Milk without sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b010; // Espreeso with sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b011; // Espreeso without sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b100; // Cappuccino with sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    
+    #10 rst = 0; 
+    #10 bean_check = 1;
+    #10 mode_select = 3'b101; // Cappuccino without sugar
+    #10 start_btn = 1;
+    #20 start_btn = 0;
+    $display($time,"cup_placed=%b,milk_dispense=%b,coffee_dispense=%b,sugar_dispense=%b,water_dispense=%b,stirrer_action=%b,done=%b",cup_placed,milk_dispense,coffee_dispense,sugar_dispense, water_dispense,stirrer_action,done);
+    #50 $finish;
+  end
+
+  always #5 clk = ~clk;
+
+endmodule
